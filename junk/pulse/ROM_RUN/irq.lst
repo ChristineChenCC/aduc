@@ -1,0 +1,159 @@
+   1              		.file	"irq.c"
+   2              		.section	.text.ADI_FIQ_Interrupt_Setup,"ax",%progbits
+   3              		.align	2
+   4              		.global	ADI_FIQ_Interrupt_Setup
+   6              	ADI_FIQ_Interrupt_Setup:
+   7              		@ Fast Interrupt Service Routine.
+   8              		@ args = 0, pretend = 0, frame = 0
+   9              		@ frame_needed = 1, uses_anonymous_args = 0
+  10 0000 04C02DE5 		str	ip, [sp, #-4]!
+  11 0004 0DC0A0E1 		mov	ip, sp
+  12 0008 0FD82DE9 		stmfd	sp!, {r0, r1, r2, r3, fp, ip, lr, pc}
+  13 000c 1C309FE5 		ldr	r3, .L3
+  14 0010 003093E5 		ldr	r3, [r3, #0]
+  15 0014 000053E3 		cmp	r3, #0
+  16 0018 04B04CE2 		sub	fp, ip, #4
+  17 001c 0FE0A011 		movne	lr, pc
+  18 0020 13FF2F11 		bxne	r3
+  19              	.L1:
+  20 0024 0F681BE9 		ldmea	fp, {r0, r1, r2, r3, fp, sp, lr}
+  21 0028 0010BDE8 		ldmfd	sp!, {ip}
+  22 002c 04F05EE2 		subs	pc, lr, #4
+  23              	.L4:
+  24              		.align	2
+  25              	.L3:
+  26 0030 00000000 		.word	FIQ
+  28              		.section	.text.ADI_SWI_Interrupt_Setup,"ax",%progbits
+  29              		.align	2
+  30              		.global	ADI_SWI_Interrupt_Setup
+  32              	ADI_SWI_Interrupt_Setup:
+  33              		@ ARM Exception Handler.
+  34              		@ args = 0, pretend = 0, frame = 0
+  35              		@ frame_needed = 1, uses_anonymous_args = 0
+  36 0000 04C02DE5 		str	ip, [sp, #-4]!
+  37 0004 0DC0A0E1 		mov	ip, sp
+  38 0008 0FD82DE9 		stmfd	sp!, {r0, r1, r2, r3, fp, ip, lr, pc}
+  39 000c 1C309FE5 		ldr	r3, .L7
+  40 0010 003093E5 		ldr	r3, [r3, #0]
+  41 0014 000053E3 		cmp	r3, #0
+  42 0018 04B04CE2 		sub	fp, ip, #4
+  43 001c 0FE0A011 		movne	lr, pc
+  44 0020 13FF2F11 		bxne	r3
+  45              	.L5:
+  46 0024 0F681BE9 		ldmea	fp, {r0, r1, r2, r3, fp, sp, lr}
+  47 0028 0010BDE8 		ldmfd	sp!, {ip}
+  48 002c 0EF0B0E1 		movs	pc, lr
+  49              	.L8:
+  50              		.align	2
+  51              	.L7:
+  52 0030 00000000 		.word	SWI
+  54              		.section	.text.ADI_UNDEF_Interrupt_Setup,"ax",%progbits
+  55              		.align	2
+  56              		.global	ADI_UNDEF_Interrupt_Setup
+  58              	ADI_UNDEF_Interrupt_Setup:
+  59              		@ ARM Exception Handler.
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 1, uses_anonymous_args = 0
+  62 0000 04C02DE5 		str	ip, [sp, #-4]!
+  63 0004 0DC0A0E1 		mov	ip, sp
+  64 0008 0FD82DE9 		stmfd	sp!, {r0, r1, r2, r3, fp, ip, lr, pc}
+  65 000c 1C309FE5 		ldr	r3, .L11
+  66 0010 003093E5 		ldr	r3, [r3, #0]
+  67 0014 000053E3 		cmp	r3, #0
+  68 0018 04B04CE2 		sub	fp, ip, #4
+  69 001c 0FE0A011 		movne	lr, pc
+  70 0020 13FF2F11 		bxne	r3
+  71              	.L9:
+  72 0024 0F681BE9 		ldmea	fp, {r0, r1, r2, r3, fp, sp, lr}
+  73 0028 0010BDE8 		ldmfd	sp!, {ip}
+  74 002c 0EF0B0E1 		movs	pc, lr
+  75              	.L12:
+  76              		.align	2
+  77              	.L11:
+  78 0030 00000000 		.word	UNDEF
+  80              		.section	.text.ADI_PABORT_Interrupt_Setup,"ax",%progbits
+  81              		.align	2
+  82              		.global	ADI_PABORT_Interrupt_Setup
+  84              	ADI_PABORT_Interrupt_Setup:
+  85              		@ args = 0, pretend = 0, frame = 0
+  86              		@ frame_needed = 1, uses_anonymous_args = 0
+  87 0000 0DC0A0E1 		mov	ip, sp
+  88 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+  89 0008 14309FE5 		ldr	r3, .L15
+  90 000c 003093E5 		ldr	r3, [r3, #0]
+  91 0010 000053E3 		cmp	r3, #0
+  92 0014 04B04CE2 		sub	fp, ip, #4
+  93 0018 0FE0A011 		movne	lr, pc
+  94 001c 13FF2F11 		bxne	r3
+  95              	.L13:
+  96 0020 00681BE9 		ldmea	fp, {fp, sp, lr}
+  97              	.L16:
+  98              		.align	2
+  99              	.L15:
+ 100 0024 00000000 		.word	PABORT
+ 102              		.section	.text.ADI_DABORT_Interrupt_Setup,"ax",%progbits
+ 103              		.align	2
+ 104              		.global	ADI_DABORT_Interrupt_Setup
+ 106              	ADI_DABORT_Interrupt_Setup:
+ 107              		@ args = 0, pretend = 0, frame = 0
+ 108              		@ frame_needed = 1, uses_anonymous_args = 0
+ 109 0000 0DC0A0E1 		mov	ip, sp
+ 110 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 111 0008 14309FE5 		ldr	r3, .L19
+ 112 000c 003093E5 		ldr	r3, [r3, #0]
+ 113 0010 000053E3 		cmp	r3, #0
+ 114 0014 04B04CE2 		sub	fp, ip, #4
+ 115 0018 0FE0A011 		movne	lr, pc
+ 116 001c 13FF2F11 		bxne	r3
+ 117              	.L17:
+ 118 0020 00681BE9 		ldmea	fp, {fp, sp, lr}
+ 119              	.L20:
+ 120              		.align	2
+ 121              	.L19:
+ 122 0024 00000000 		.word	DABORT
+ 124              		.global	IRQ
+ 125              		.section	.bss.IRQ,"aw",%nobits
+ 126              		.align	2
+ 129              	IRQ:
+ 130 0000 00000000 		.space	4
+ 131              		.global	SWI
+ 132              		.section	.bss.SWI,"aw",%nobits
+ 133              		.align	2
+ 136              	SWI:
+ 137 0000 00000000 		.space	4
+ 138              		.global	FIQ
+ 139              		.section	.bss.FIQ,"aw",%nobits
+ 140              		.align	2
+ 143              	FIQ:
+ 144 0000 00000000 		.space	4
+ 145              		.global	UNDEF
+ 146              		.section	.bss.UNDEF,"aw",%nobits
+ 147              		.align	2
+ 150              	UNDEF:
+ 151 0000 00000000 		.space	4
+ 152              		.global	PABORT
+ 153              		.section	.bss.PABORT,"aw",%nobits
+ 154              		.align	2
+ 157              	PABORT:
+ 158 0000 00000000 		.space	4
+ 159              		.global	DABORT
+ 160              		.section	.bss.DABORT,"aw",%nobits
+ 161              		.align	2
+ 164              	DABORT:
+ 165 0000 00000000 		.space	4
+ 166              		.ident	"GCC: (GNU) 3.3.2"
+DEFINED SYMBOLS
+                            *ABS*:00000000 irq.c
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:6      .text.ADI_FIQ_Interrupt_Setup:00000000 ADI_FIQ_Interrupt_Setup
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:143    .bss.FIQ:00000000 FIQ
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:32     .text.ADI_SWI_Interrupt_Setup:00000000 ADI_SWI_Interrupt_Setup
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:136    .bss.SWI:00000000 SWI
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:58     .text.ADI_UNDEF_Interrupt_Setup:00000000 ADI_UNDEF_Interrupt_Setup
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:150    .bss.UNDEF:00000000 UNDEF
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:84     .text.ADI_PABORT_Interrupt_Setup:00000000 ADI_PABORT_Interrupt_Setup
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:157    .bss.PABORT:00000000 PABORT
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:106    .text.ADI_DABORT_Interrupt_Setup:00000000 ADI_DABORT_Interrupt_Setup
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:164    .bss.DABORT:00000000 DABORT
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccBg4Pb8.s:129    .bss.IRQ:00000000 IRQ
+
+NO UNDEFINED SYMBOLS

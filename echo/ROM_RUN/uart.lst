@@ -1,0 +1,186 @@
+   1              		.file	"uart.c"
+   2              		.section	.text.InitUart,"ax",%progbits
+   3              		.align	2
+   4              		.global	InitUart
+   6              	InitUart:
+   7              		@ args = 0, pretend = 0, frame = 0
+   8              		@ frame_needed = 0, uses_anonymous_args = 0
+   9              		@ link register save eliminated.
+  10 0000 34309FE5 		ldr	r3, .L2
+  11 0004 34109FE5 		ldr	r1, .L2+4
+  12 0008 1120A0E3 		mov	r2, #17
+  13 000c 002083E5 		str	r2, [r3, #0]
+  14 0010 8030A0E3 		mov	r3, #128
+  15 0014 003081E5 		str	r3, [r1, #0]
+  16 0018 24309FE5 		ldr	r3, .L2+8
+  17 001c 2320A0E3 		mov	r2, #35
+  18 0020 002083E5 		str	r2, [r3, #0]
+  19 0024 1C309FE5 		ldr	r3, .L2+12
+  20 0028 0020A0E3 		mov	r2, #0
+  21 002c 002083E5 		str	r2, [r3, #0]
+  22 0030 0330A0E3 		mov	r3, #3
+  23              		@ lr needed for prologue
+  24 0034 003081E5 		str	r3, [r1, #0]
+  25 0038 0EF0A0E1 		mov	pc, lr
+  26              	.L3:
+  27              		.align	2
+  28              	.L2:
+  29 003c 04F4FFFF 		.word	-3068
+  30 0040 0C07FFFF 		.word	-63732
+  31 0044 0007FFFF 		.word	-63744
+  32 0048 0407FFFF 		.word	-63740
+  34              		.section	.text.getc,"ax",%progbits
+  35              		.align	2
+  36              		.global	getc
+  38              	getc:
+  39              		@ args = 0, pretend = 0, frame = 0
+  40              		@ frame_needed = 0, uses_anonymous_args = 0
+  41              		@ link register save eliminated.
+  42              		@ lr needed for prologue
+  43              	.L5:
+  44 0000 18309FE5 		ldr	r3, .L9
+  45 0004 003093E5 		ldr	r3, [r3, #0]
+  46 0008 010013E3 		tst	r3, #1
+  47 000c 10309F15 		ldrne	r3, .L9+4
+  48 0010 00009315 		ldrne	r0, [r3, #0]
+  49 0014 FF000012 		andne	r0, r0, #255
+  50 0018 0EF0A011 		movne	pc, lr
+  51 001c FEFFFFEA 		b	.L5
+  52              	.L10:
+  53              		.align	2
+  54              	.L9:
+  55 0020 1407FFFF 		.word	-63724
+  56 0024 0007FFFF 		.word	-63744
+  58              		.section	.text.putc,"ax",%progbits
+  59              		.align	2
+  60              		.global	putc
+  62              	putc:
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 0, uses_anonymous_args = 0
+  65              		@ link register save eliminated.
+  66              		@ lr needed for prologue
+  67 0000 FF0000E2 		and	r0, r0, #255
+  68              	.L12:
+  69 0004 14309FE5 		ldr	r3, .L16
+  70 0008 003093E5 		ldr	r3, [r3, #0]
+  71 000c 400013E3 		tst	r3, #64
+  72 0010 0C309F15 		ldrne	r3, .L16+4
+  73 0014 00008315 		strne	r0, [r3, #0]
+  74 0018 0EF0A011 		movne	pc, lr
+  75 001c FFFFFFEA 		b	.L12
+  76              	.L17:
+  77              		.align	2
+  78              	.L16:
+  79 0020 1407FFFF 		.word	-63724
+  80 0024 0007FFFF 		.word	-63744
+  82              		.section	.text.puts,"ax",%progbits
+  83              		.align	2
+  84              		.global	puts
+  86              	puts:
+  87              		@ args = 0, pretend = 0, frame = 0
+  88              		@ frame_needed = 1, uses_anonymous_args = 0
+  89 0000 0DC0A0E1 		mov	ip, sp
+  90 0004 10D82DE9 		stmfd	sp!, {r4, fp, ip, lr, pc}
+  91 0008 0040A0E1 		mov	r4, r0
+  92 000c 0000D0E5 		ldrb	r0, [r0, #0]	@ zero_extendqisi2
+  93 0010 000050E3 		cmp	r0, #0
+  94 0014 04B04CE2 		sub	fp, ip, #4
+  95 0018 10A81B09 		ldmeqea	fp, {r4, fp, sp, pc}
+  96              	.L22:
+  97 001c FF0000E2 		and	r0, r0, #255
+  98 0020 FEFFFFEB 		bl	putc
+  99 0024 0000D4E5 		ldrb	r0, [r4, #0]	@ zero_extendqisi2
+ 100 0028 000050E3 		cmp	r0, #0
+ 101 002c 10A81B09 		ldmeqea	fp, {r4, fp, sp, pc}
+ 102 0030 050000EA 		b	.L22
+ 104              		.global	__divsi3
+ 105              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 106              		.align	2
+ 107              	.LC0:
+ 108 0000 7A797877 		.ascii	"zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdef"
+ 108      76757473 
+ 108      7271706F 
+ 108      6E6D6C6B 
+ 108      6A696867 
+ 109 0033 6768696A 		.ascii	"ghijklmnopqrstuvwxyz\000"
+ 109      6B6C6D6E 
+ 109      6F707172 
+ 109      73747576 
+ 109      7778797A 
+ 110              		.section	.text.itoa,"ax",%progbits
+ 111              		.align	2
+ 112              		.global	itoa
+ 114              	itoa:
+ 115              		@ args = 0, pretend = 0, frame = 0
+ 116              		@ frame_needed = 1, uses_anonymous_args = 0
+ 117 0000 023042E2 		sub	r3, r2, #2
+ 118 0004 220053E3 		cmp	r3, #34
+ 119 0008 0DC0A0E1 		mov	ip, sp
+ 120 000c 0030A083 		movhi	r3, #0
+ 121 0010 F0D92DE9 		stmfd	sp!, {r4, r5, r6, r7, r8, fp, ip, lr, pc}
+ 122 0014 04B04CE2 		sub	fp, ip, #4
+ 123 0018 0270A0E1 		mov	r7, r2
+ 124 001c 0180A0E1 		mov	r8, r1
+ 125 0020 0030C185 		strhib	r3, [r1, #0]
+ 126 0024 2100008A 		bhi	.L25
+ 127 0028 0140A0E1 		mov	r4, r1
+ 128 002c 0160A0E1 		mov	r6, r1
+ 129              	.L27:
+ 130 0030 0710A0E1 		mov	r1, r7
+ 131 0034 0050A0E1 		mov	r5, r0
+ 132 0038 FEFFFFEB 		bl	__divsi3
+ 133 003c 970003E0 		mul	r3, r7, r0
+ 134 0040 4C209FE5 		ldr	r2, .L38
+ 135 0044 053063E0 		rsb	r3, r3, r5
+ 136 0048 023083E0 		add	r3, r3, r2
+ 137 004c 2330D3E5 		ldrb	r3, [r3, #35]	@ zero_extendqisi2
+ 138 0050 000050E3 		cmp	r0, #0
+ 139 0054 0130C4E4 		strb	r3, [r4], #1
+ 140 0058 0A00001A 		bne	.L27
+ 141 005c 000055E3 		cmp	r5, #0
+ 142 0060 2D30A0B3 		movlt	r3, #45
+ 143 0064 0130C4B4 		strltb	r3, [r4], #1
+ 144 0068 010044E4 		strb	r0, [r4], #-1
+ 145 006c 040058E1 		cmp	r8, r4
+ 146 0070 2100002A 		bcs	.L25
+ 147              	.L35:
+ 148 0074 0020D4E5 		ldrb	r2, [r4, #0]	@ zero_extendqisi2
+ 149 0078 0030D6E5 		ldrb	r3, [r6, #0]	@ zero_extendqisi2
+ 150 007c 013044E4 		strb	r3, [r4], #-1
+ 151 0080 0120C6E4 		strb	r2, [r6], #1
+ 152 0084 040056E1 		cmp	r6, r4
+ 153 0088 1B00003A 		bcc	.L35
+ 154              	.L25:
+ 155 008c 0800A0E1 		mov	r0, r8
+ 156 0090 F0A91BE9 		ldmea	fp, {r4, r5, r6, r7, r8, fp, sp, pc}
+ 157              	.L39:
+ 158              		.align	2
+ 159              	.L38:
+ 160 0094 00000000 		.word	.LC0
+ 162              		.section	.text.puti,"ax",%progbits
+ 163              		.align	2
+ 164              		.global	puti
+ 166              	puti:
+ 167              		@ args = 0, pretend = 0, frame = 32
+ 168              		@ frame_needed = 1, uses_anonymous_args = 0
+ 169 0000 0DC0A0E1 		mov	ip, sp
+ 170 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 171 0008 04B04CE2 		sub	fp, ip, #4
+ 172 000c 20D04DE2 		sub	sp, sp, #32
+ 173 0010 2C104BE2 		sub	r1, fp, #44
+ 174 0014 2020A0E3 		mov	r2, #32
+ 175 0018 FEFFFFEB 		bl	itoa
+ 176 001c FEFFFFEB 		bl	puts
+ 177 0020 00A81BE9 		ldmea	fp, {fp, sp, pc}
+ 179              		.ident	"GCC: (GNU) 3.3.2"
+DEFINED SYMBOLS
+                            *ABS*:00000000 uart.c
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccnZdNkX.s:6      .text.InitUart:00000000 InitUart
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccnZdNkX.s:38     .text.getc:00000000 getc
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccnZdNkX.s:62     .text.putc:00000000 putc
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccnZdNkX.s:86     .text.puts:00000000 puts
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccnZdNkX.s:114    .text.itoa:00000000 itoa
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccnZdNkX.s:166    .text.puti:00000000 puti
+
+UNDEFINED SYMBOLS
+__divsi3

@@ -1,0 +1,86 @@
+   1              		.file	"GPIO.c"
+   2              		.section	.text.main,"ax",%progbits
+   3              		.align	2
+   4              		.global	main
+   5              		.thumb_func
+   7              	main:
+   8 0000 00B5     		push	{lr}
+   9 0002 084A     		ldr	r2, .L7
+  10 0004 084B     		ldr	r3, .L7+4
+  11 0006 1A60     		str	r2, [r3]
+  12 0008 084B     		ldr	r3, .L7+8
+  13 000a 0822     		mov	r2, #8
+  14 000c 1A60     		str	r2, [r3]
+  15 000e 084B     		ldr	r3, .L7+12
+  16 0010 8022     		mov	r2, #128
+  17 0012 1A60     		str	r2, [r3]
+  18 0014 074B     		ldr	r3, .L7+16
+  19 0016 C422     		mov	r2, #196
+  20 0018 1A60     		str	r2, [r3]
+  21 001a 8023     		mov	r3, #128
+  22 001c 064A     		ldr	r2, .L7+20
+  23 001e DB04     		lsl	r3, r3, #19
+  24 0020 1360     		str	r3, [r2]
+  25              	.L5:
+  26 0022 FEE7     		b	.L5
+  27              	.L8:
+  28              		.align	2
+  29              	.L7:
+  30 0024 00000000 		.word	My_IRQ_Function
+  31 0028 00000000 		.word	IRQ
+  32 002c 0800FFFF 		.word	-65528
+  33 0030 2003FFFF 		.word	-64736
+  34 0034 2803FFFF 		.word	-64728
+  35 0038 60F4FFFF 		.word	-2976
+  37              		.section	.text.My_IRQ_Function,"ax",%progbits
+  38              		.align	2
+  39              		.global	My_IRQ_Function
+  40              		.thumb_func
+  42              	My_IRQ_Function:
+  43 0000 00B5     		push	{lr}
+  44 0002 0D4B     		ldr	r3, .L14
+  45 0004 1B68     		ldr	r3, [r3]
+  46 0006 0822     		mov	r2, #8
+  47 0008 1340     		and	r3, r3, r2
+  48 000a 002B     		cmp	r3, #0
+  49 000c 12D0     		beq	.L9
+  50 000e 0B4B     		ldr	r3, .L14+4
+  51 0010 0022     		mov	r2, #0
+  52 0012 1A60     		str	r2, [r3]
+  53 0014 0A49     		ldr	r1, .L14+8
+  54 0016 8023     		mov	r3, #128
+  55 0018 0A68     		ldr	r2, [r1]
+  56 001a DB02     		lsl	r3, r3, #11
+  57 001c 5A40     		eor	r2, r2, r3
+  58 001e 0A60     		str	r2, [r1]
+  59 0020 0B68     		ldr	r3, [r1]
+  60 0022 0422     		mov	r2, #4
+  61 0024 1340     		and	r3, r3, r2
+  62 0026 002B     		cmp	r3, #0
+  63 0028 01D0     		beq	.L11
+  64 002a 1022     		mov	r2, #16
+  65 002c 00E0     		b	.L13
+  66              	.L11:
+  67 002e 8022     		mov	r2, #128
+  68              	.L13:
+  69 0030 044B     		ldr	r3, .L14+12
+  70 0032 1A60     		str	r2, [r3]
+  71              	.L9:
+  72              		@ sp needed for prologue
+  73 0034 01BC     		pop	{r0}
+  74 0036 0047     		bx	r0
+  75              	.L15:
+  76              		.align	2
+  77              	.L14:
+  78 0038 0000FFFF 		.word	-65536
+  79 003c 2C03FFFF 		.word	-64724
+  80 0040 60F4FFFF 		.word	-2976
+  81 0044 2003FFFF 		.word	-64736
+  83              		.ident	"GCC: (GNU) 3.3.2"
+DEFINED SYMBOLS
+                            *ABS*:00000000 GPIO.c
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccOjXPwU.s:7      .text.main:00000000 main
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccOjXPwU.s:42     .text.My_IRQ_Function:00000000 My_IRQ_Function
+
+UNDEFINED SYMBOLS
+IRQ

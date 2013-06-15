@@ -1,0 +1,397 @@
+   1              		.file	"main.c"
+   2              		.section	.text.Delay,"ax",%progbits
+   3              		.align	2
+   4              		.global	Delay
+   6              	Delay:
+   7              		@ args = 0, pretend = 0, frame = 0
+   8              		@ frame_needed = 0, uses_anonymous_args = 0
+   9              		@ link register save eliminated.
+  10              		@ lr needed for prologue
+  11              	.L2:
+  12 0000 010040E2 		sub	r0, r0, #1
+  13 0004 010070E3 		cmn	r0, #1
+  14 0008 0EF0A001 		moveq	pc, lr
+  15 000c FEFFFFEA 		b	.L2
+  17              		.section	.text.InitADC,"ax",%progbits
+  18              		.align	2
+  19              		.global	InitADC
+  21              	InitADC:
+  22              		@ args = 0, pretend = 0, frame = 0
+  23              		@ frame_needed = 1, uses_anonymous_args = 0
+  24 0000 34309FE5 		ldr	r3, .L7
+  25 0004 0DC0A0E1 		mov	ip, sp
+  26 0008 2020A0E3 		mov	r2, #32
+  27 000c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+  28 0010 28009FE5 		ldr	r0, .L7+4
+  29 0014 002083E5 		str	r2, [r3, #0]
+  30 0018 04B04CE2 		sub	fp, ip, #4
+  31 001c FEFFFFEB 		bl	Delay
+  32 0020 1C309FE5 		ldr	r3, .L7+8
+  33 0024 022CA0E3 		mov	r2, #512
+  34 0028 002083E5 		str	r2, [r3, #0]
+  35 002c 14309FE5 		ldr	r3, .L7+12
+  36 0030 0120A0E3 		mov	r2, #1
+  37 0034 002083E5 		str	r2, [r3, #0]
+  38 0038 00A81BE9 		ldmea	fp, {fp, sp, pc}
+  39              	.L8:
+  40              		.align	2
+  41              	.L7:
+  42 003c 0005FFFF 		.word	-64256
+  43 0040 409C0000 		.word	40000
+  44 0044 3405FFFF 		.word	-64204
+  45 0048 8C04FFFF 		.word	-64372
+  47              		.section	.text.ADC_convert,"ax",%progbits
+  48              		.align	2
+  49              		.global	ADC_convert
+  51              	ADC_convert:
+  52              		@ args = 0, pretend = 0, frame = 0
+  53              		@ frame_needed = 1, uses_anonymous_args = 0
+  54 0000 3C309FE5 		ldr	r3, .L14
+  55 0004 0DC0A0E1 		mov	ip, sp
+  56 0008 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+  57 000c 000083E5 		str	r0, [r3, #0]
+  58 0010 30309FE5 		ldr	r3, .L14+4
+  59 0014 A320A0E3 		mov	r2, #163
+  60 0018 002083E5 		str	r2, [r3, #0]
+  61 001c 04B04CE2 		sub	fp, ip, #4
+  62              	.L10:
+  63 0020 24309FE5 		ldr	r3, .L14+8
+  64 0024 003093E5 		ldr	r3, [r3, #0]
+  65 0028 000053E3 		cmp	r3, #0
+  66 002c 0600000A 		beq	.L10
+  67 0030 7D0EA0E3 		mov	r0, #2000
+  68 0034 FEFFFFEB 		bl	Delay
+  69 0038 10309FE5 		ldr	r3, .L14+12
+  70 003c 000093E5 		ldr	r0, [r3, #0]
+  71 0040 00A81BE9 		ldmea	fp, {fp, sp, pc}
+  72              	.L15:
+  73              		.align	2
+  74              	.L14:
+  75 0044 0405FFFF 		.word	-64252
+  76 0048 0005FFFF 		.word	-64256
+  77 004c 0C05FFFF 		.word	-64244
+  78 0050 1005FFFF 		.word	-64240
+  80              		.section	.rodata.str1.4,"aMS",%progbits,1
+  81              		.align	2
+  82              	.LC0:
+  83 0000 30313233 		.ascii	"0123456789ABCDEF\000"
+  83      34353637 
+  83      38394142 
+  83      43444546 
+  83      00
+  84 0011 000000   		.section	.text.hex,"ax",%progbits
+  85              		.align	2
+  86              		.global	hex
+  88              	hex:
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 1, uses_anonymous_args = 0
+  91 0000 0DC0A0E1 		mov	ip, sp
+  92 0004 30D82DE9 		stmfd	sp!, {r4, r5, fp, ip, lr, pc}
+  93 0008 04B04CE2 		sub	fp, ip, #4
+  94 000c 0050A0E1 		mov	r5, r0
+  95 0010 0740A0E3 		mov	r4, #7
+  96              	.L20:
+  97 0014 0431A0E1 		mov	r3, r4, asl #2
+  98 0018 1C209FE5 		ldr	r2, .L23
+  99 001c 5533A0E1 		mov	r3, r5, asr r3
+ 100 0020 0F3003E2 		and	r3, r3, #15
+ 101 0024 0300D2E7 		ldrb	r0, [r2, r3]	@ zero_extendqisi2
+ 102 0028 014044E2 		sub	r4, r4, #1
+ 103 002c FEFFFFEB 		bl	putc
+ 104 0030 010074E3 		cmn	r4, #1
+ 105 0034 30A81B09 		ldmeqea	fp, {r4, r5, fp, sp, pc}
+ 106 0038 030000EA 		b	.L20
+ 107              	.L24:
+ 108              		.align	2
+ 109              	.L23:
+ 110 003c 00000000 		.word	.LC0
+ 112              		.section	.text.nl,"ax",%progbits
+ 113              		.align	2
+ 114              		.global	nl
+ 116              	nl:
+ 117              		@ args = 0, pretend = 0, frame = 0
+ 118              		@ frame_needed = 1, uses_anonymous_args = 0
+ 119 0000 0DC0A0E1 		mov	ip, sp
+ 120 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 121 0008 0D00A0E3 		mov	r0, #13
+ 122 000c 04B04CE2 		sub	fp, ip, #4
+ 123 0010 FEFFFFEB 		bl	putc
+ 124 0014 0A00A0E3 		mov	r0, #10
+ 125 0018 00681BE9 		ldmea	fp, {fp, sp, lr}
+ 126 001c FEFFFFEA 		b	putc
+ 128              		.section	.text.Tmp,"ax",%progbits
+ 129              		.align	2
+ 130              		.global	Tmp
+ 132              	Tmp:
+ 133              		@ args = 0, pretend = 0, frame = 0
+ 134              		@ frame_needed = 0, uses_anonymous_args = 0
+ 135              		@ link register save eliminated.
+ 136 0000 2C309FE5 		ldr	r3, .L27
+ 137 0004 4024A0E1 		mov	r2, r0, asr #8
+ 138 0008 9213C3E0 		smull	r1, r3, r2, r3
+ 139 000c C00FA0E1 		mov	r0, r0, asr #31
+ 140 0010 023083E0 		add	r3, r3, r2
+ 141 0014 C30560E0 		rsb	r0, r0, r3, asr #11
+ 142 0018 803260E0 		rsb	r3, r0, r0, asl #5
+ 143 001c 030180E0 		add	r0, r0, r3, asl #2
+ 144 0020 000180E0 		add	r0, r0, r0, asl #2
+ 145 0024 0005A0E1 		mov	r0, r0, asl #10
+ 146 0028 4004A0E1 		mov	r0, r0, asr #8
+ 147 002c 320C40E2 		sub	r0, r0, #12800
+ 148              		@ lr needed for prologue
+ 149 0030 0EF0A0E1 		mov	pc, lr
+ 150              	.L28:
+ 151              		.align	2
+ 152              	.L27:
+ 153 0034 81000880 		.word	-2146959231
+ 155              		.section	.text.c2f,"ax",%progbits
+ 156              		.align	2
+ 157              		.global	c2f
+ 159              	c2f:
+ 160              		@ args = 0, pretend = 0, frame = 0
+ 161              		@ frame_needed = 0, uses_anonymous_args = 0
+ 162              		@ link register save eliminated.
+ 163 0000 803080E0 		add	r3, r0, r0, asl #1
+ 164 0004 830160E0 		rsb	r0, r0, r3, asl #3
+ 165 0008 000180E0 		add	r0, r0, r0, asl #2
+ 166 000c 0005A0E1 		mov	r0, r0, asl #10
+ 167 0010 4004A0E1 		mov	r0, r0, asr #8
+ 168 0014 200080E2 		add	r0, r0, #32
+ 169              		@ lr needed for prologue
+ 170 0018 0EF0A0E1 		mov	pc, lr
+ 172              		.section	.text.main,"ax",%progbits
+ 173              		.align	2
+ 174              		.global	main
+ 176              	main:
+ 177              		@ args = 0, pretend = 0, frame = 0
+ 178              		@ frame_needed = 1, uses_anonymous_args = 0
+ 179 0000 0DC0A0E1 		mov	ip, sp
+ 180 0004 30D82DE9 		stmfd	sp!, {r4, r5, fp, ip, lr, pc}
+ 181 0008 04B04CE2 		sub	fp, ip, #4
+ 182 000c FEFFFFEB 		bl	InitFreq
+ 183 0010 FEFFFFEB 		bl	InitUart
+ 184 0014 FEFFFFEB 		bl	InitADC
+ 185 0018 C4329FE5 		ldr	r3, .L55
+ 186 001c 0F22A0E3 		mov	r2, #-268435456
+ 187 0020 002083E5 		str	r2, [r3, #0]
+ 188              	.L51:
+ 189 0024 FEFFFFEB 		bl	getc
+ 190 0028 FF4000E2 		and	r4, r0, #255
+ 191 002c 303044E2 		sub	r3, r4, #48
+ 192 0030 340053E3 		cmp	r3, #52
+ 193 0034 03F19F97 		ldrls	pc, [pc, r3, asl #2]
+ 194 0038 B10000EA 		b	.L49
+ 195              		.p2align 2
+ 196              	.L50:
+ 197 003c 10010000 		.word	.L35
+ 198 0040 70010000 		.word	.L36
+ 199 0044 80010000 		.word	.L37
+ 200 0048 94010000 		.word	.L38
+ 201 004c A4010000 		.word	.L39
+ 202 0050 CC020000 		.word	.L49
+ 203 0054 CC020000 		.word	.L49
+ 204 0058 CC020000 		.word	.L49
+ 205 005c CC020000 		.word	.L49
+ 206 0060 CC020000 		.word	.L49
+ 207 0064 CC020000 		.word	.L49
+ 208 0068 CC020000 		.word	.L49
+ 209 006c CC020000 		.word	.L49
+ 210 0070 CC020000 		.word	.L49
+ 211 0074 CC020000 		.word	.L49
+ 212 0078 CC020000 		.word	.L49
+ 213 007c CC020000 		.word	.L49
+ 214 0080 B4010000 		.word	.L40
+ 215 0084 D4010000 		.word	.L41
+ 216 0088 F4010000 		.word	.L42
+ 217 008c 14020000 		.word	.L43
+ 218 0090 CC020000 		.word	.L49
+ 219 0094 CC020000 		.word	.L49
+ 220 0098 CC020000 		.word	.L49
+ 221 009c CC020000 		.word	.L49
+ 222 00a0 CC020000 		.word	.L49
+ 223 00a4 CC020000 		.word	.L49
+ 224 00a8 CC020000 		.word	.L49
+ 225 00ac CC020000 		.word	.L49
+ 226 00b0 CC020000 		.word	.L49
+ 227 00b4 CC020000 		.word	.L49
+ 228 00b8 CC020000 		.word	.L49
+ 229 00bc CC020000 		.word	.L49
+ 230 00c0 CC020000 		.word	.L49
+ 231 00c4 CC020000 		.word	.L49
+ 232 00c8 CC020000 		.word	.L49
+ 233 00cc B8020000 		.word	.L48
+ 234 00d0 CC020000 		.word	.L49
+ 235 00d4 CC020000 		.word	.L49
+ 236 00d8 CC020000 		.word	.L49
+ 237 00dc CC020000 		.word	.L49
+ 238 00e0 CC020000 		.word	.L49
+ 239 00e4 CC020000 		.word	.L49
+ 240 00e8 CC020000 		.word	.L49
+ 241 00ec CC020000 		.word	.L49
+ 242 00f0 CC020000 		.word	.L49
+ 243 00f4 CC020000 		.word	.L49
+ 244 00f8 CC020000 		.word	.L49
+ 245 00fc CC020000 		.word	.L49
+ 246 0100 34020000 		.word	.L44
+ 247 0104 54020000 		.word	.L45
+ 248 0108 74020000 		.word	.L46
+ 249 010c 94020000 		.word	.L47
+ 250              	.L35:
+ 251 0110 4000A0E3 		mov	r0, #64
+ 252 0114 FEFFFFEB 		bl	putc
+ 253 0118 0000A0E3 		mov	r0, #0
+ 254 011c FEFFFFEB 		bl	ADC_convert
+ 255 0120 0050A0E1 		mov	r5, r0
+ 256 0124 FEFFFFEB 		bl	hex
+ 257 0128 FEFFFFEB 		bl	nl
+ 258 012c 3A00A0E3 		mov	r0, #58
+ 259 0130 FEFFFFEB 		bl	putc
+ 260 0134 0500A0E1 		mov	r0, r5
+ 261 0138 FEFFFFEB 		bl	Tmp
+ 262 013c 0040A0E1 		mov	r4, r0
+ 263 0140 FEFFFFEB 		bl	hex
+ 264 0144 FEFFFFEB 		bl	nl
+ 265 0148 3A00A0E3 		mov	r0, #58
+ 266 014c FEFFFFEB 		bl	putc
+ 267 0150 0500A0E1 		mov	r0, r5
+ 268 0154 FEFFFFEB 		bl	puti
+ 269 0158 FEFFFFEB 		bl	nl
+ 270 015c 3A00A0E3 		mov	r0, #58
+ 271 0160 FEFFFFEB 		bl	putc
+ 272 0164 0400A0E1 		mov	r0, r4
+ 273 0168 FEFFFFEB 		bl	puti
+ 274 016c B50000EA 		b	.L34
+ 275              	.L36:
+ 276 0170 4000A0E3 		mov	r0, #64
+ 277 0174 FEFFFFEB 		bl	putc
+ 278 0178 0100A0E3 		mov	r0, #1
+ 279 017c 610000EA 		b	.L54
+ 280              	.L37:
+ 281 0180 4000A0E3 		mov	r0, #64
+ 282 0184 FEFFFFEB 		bl	putc
+ 283 0188 0200A0E3 		mov	r0, #2
+ 284              	.L54:
+ 285 018c FEFFFFEB 		bl	ADC_convert
+ 286 0190 AF0000EA 		b	.L53
+ 287              	.L38:
+ 288 0194 4000A0E3 		mov	r0, #64
+ 289 0198 FEFFFFEB 		bl	putc
+ 290 019c 0300A0E3 		mov	r0, #3
+ 291 01a0 610000EA 		b	.L54
+ 292              	.L39:
+ 293 01a4 4000A0E3 		mov	r0, #64
+ 294 01a8 FEFFFFEB 		bl	putc
+ 295 01ac 0400A0E3 		mov	r0, #4
+ 296 01b0 610000EA 		b	.L54
+ 297              	.L40:
+ 298 01b4 2B00A0E3 		mov	r0, #43
+ 299 01b8 FEFFFFEB 		bl	putc
+ 300 01bc 4100A0E3 		mov	r0, #65
+ 301 01c0 FEFFFFEB 		bl	putc
+ 302 01c4 18219FE5 		ldr	r2, .L55
+ 303 01c8 003092E5 		ldr	r3, [r2, #0]
+ 304 01cc 013683E3 		orr	r3, r3, #1048576
+ 305 01d0 AA0000EA 		b	.L52
+ 306              	.L41:
+ 307 01d4 2B00A0E3 		mov	r0, #43
+ 308 01d8 FEFFFFEB 		bl	putc
+ 309 01dc 4200A0E3 		mov	r0, #66
+ 310 01e0 FEFFFFEB 		bl	putc
+ 311 01e4 F8209FE5 		ldr	r2, .L55
+ 312 01e8 003092E5 		ldr	r3, [r2, #0]
+ 313 01ec 023683E3 		orr	r3, r3, #2097152
+ 314 01f0 AA0000EA 		b	.L52
+ 315              	.L42:
+ 316 01f4 2B00A0E3 		mov	r0, #43
+ 317 01f8 FEFFFFEB 		bl	putc
+ 318 01fc 4300A0E3 		mov	r0, #67
+ 319 0200 FEFFFFEB 		bl	putc
+ 320 0204 D8209FE5 		ldr	r2, .L55
+ 321 0208 003092E5 		ldr	r3, [r2, #0]
+ 322 020c 013583E3 		orr	r3, r3, #4194304
+ 323 0210 AA0000EA 		b	.L52
+ 324              	.L43:
+ 325 0214 2B00A0E3 		mov	r0, #43
+ 326 0218 FEFFFFEB 		bl	putc
+ 327 021c 4400A0E3 		mov	r0, #68
+ 328 0220 FEFFFFEB 		bl	putc
+ 329 0224 B8209FE5 		ldr	r2, .L55
+ 330 0228 003092E5 		ldr	r3, [r2, #0]
+ 331 022c 023583E3 		orr	r3, r3, #8388608
+ 332 0230 AA0000EA 		b	.L52
+ 333              	.L44:
+ 334 0234 2D00A0E3 		mov	r0, #45
+ 335 0238 FEFFFFEB 		bl	putc
+ 336 023c 6100A0E3 		mov	r0, #97
+ 337 0240 FEFFFFEB 		bl	putc
+ 338 0244 98209FE5 		ldr	r2, .L55
+ 339 0248 003092E5 		ldr	r3, [r2, #0]
+ 340 024c 0136C3E3 		bic	r3, r3, #1048576
+ 341 0250 AA0000EA 		b	.L52
+ 342              	.L45:
+ 343 0254 2D00A0E3 		mov	r0, #45
+ 344 0258 FEFFFFEB 		bl	putc
+ 345 025c 6200A0E3 		mov	r0, #98
+ 346 0260 FEFFFFEB 		bl	putc
+ 347 0264 78209FE5 		ldr	r2, .L55
+ 348 0268 003092E5 		ldr	r3, [r2, #0]
+ 349 026c 0236C3E3 		bic	r3, r3, #2097152
+ 350 0270 AA0000EA 		b	.L52
+ 351              	.L46:
+ 352 0274 2D00A0E3 		mov	r0, #45
+ 353 0278 FEFFFFEB 		bl	putc
+ 354 027c 6300A0E3 		mov	r0, #99
+ 355 0280 FEFFFFEB 		bl	putc
+ 356 0284 58209FE5 		ldr	r2, .L55
+ 357 0288 003092E5 		ldr	r3, [r2, #0]
+ 358 028c 0135C3E3 		bic	r3, r3, #4194304
+ 359 0290 AA0000EA 		b	.L52
+ 360              	.L47:
+ 361 0294 2D00A0E3 		mov	r0, #45
+ 362 0298 FEFFFFEB 		bl	putc
+ 363 029c 6400A0E3 		mov	r0, #100
+ 364 02a0 FEFFFFEB 		bl	putc
+ 365 02a4 38209FE5 		ldr	r2, .L55
+ 366 02a8 003092E5 		ldr	r3, [r2, #0]
+ 367 02ac 0235C3E3 		bic	r3, r3, #8388608
+ 368              	.L52:
+ 369 02b0 003082E5 		str	r3, [r2, #0]
+ 370 02b4 B50000EA 		b	.L34
+ 371              	.L48:
+ 372 02b8 4000A0E3 		mov	r0, #64
+ 373 02bc FEFFFFEB 		bl	putc
+ 374 02c0 20009FE5 		ldr	r0, .L55+4
+ 375              	.L53:
+ 376 02c4 FEFFFFEB 		bl	hex
+ 377 02c8 B50000EA 		b	.L34
+ 378              	.L49:
+ 379 02cc 3A00A0E3 		mov	r0, #58
+ 380 02d0 FEFFFFEB 		bl	putc
+ 381 02d4 0400A0E1 		mov	r0, r4
+ 382 02d8 FEFFFFEB 		bl	putc
+ 383              	.L34:
+ 384 02dc FEFFFFEB 		bl	nl
+ 385 02e0 070000EA 		b	.L51
+ 386              	.L56:
+ 387              		.align	2
+ 388              	.L55:
+ 389 02e4 30F4FFFF 		.word	-3024
+ 390 02e8 78563412 		.word	305419896
+ 392              		.ident	"GCC: (GNU) 3.3.2"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccyjxzTB.s:6      .text.Delay:00000000 Delay
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccyjxzTB.s:21     .text.InitADC:00000000 InitADC
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccyjxzTB.s:51     .text.ADC_convert:00000000 ADC_convert
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccyjxzTB.s:88     .text.hex:00000000 hex
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccyjxzTB.s:116    .text.nl:00000000 nl
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccyjxzTB.s:132    .text.Tmp:00000000 Tmp
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccyjxzTB.s:159    .text.c2f:00000000 c2f
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccyjxzTB.s:176    .text.main:00000000 main
+
+UNDEFINED SYMBOLS
+putc
+InitFreq
+InitUart
+getc
+puti

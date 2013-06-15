@@ -1,0 +1,318 @@
+   1              	# 1 "startup.S"
+   2              	# 1 "<built-in>"
+   1              	/* 
+   0              	
+   0              	
+   2              	===========================================
+   3              	                                           
+   4              	   ADuC702X Startup Code V0.2              
+   5              	                                           
+   6              	===========================================
+   7              	                                           
+   8              	   The purpose of this code is to setup    
+   9              	   the Interrupt Vectors, the stack        
+  10              	   pointer in the different modes,         
+  11              	   to zero the RAM and copy variables      
+  12              	   from ROM to RAM and to brach to         
+  13              	   C code at reset.                        
+  14              	     
+  15              	Modification by Martin Thomas / * mt * /:  
+  16              	take empty data-section into account
+  17              		                                       
+  18              	===========================================
+  19              	*/
+  20              	
+  21              	@ mt - Version 1. Dec 2007 - Assembler wrapper for IRQ
+  22              	
+  23              	/*
+  24              	   Define required MMR Base value and offsets
+  25              	*/
+  26              	
+  27              	.equ    MMR_BASE_0,         0xFFFF0000
+  28              	.equ    POWKEY1_OFFSET,     0x0404
+  29              	.equ    POWCON_OFFSET,      0x0408
+  30              	.equ    POWKEY2_OFFSET,     0x040C
+  31              	
+  32              	/* 
+  33              	//*** <<< Use Configuration Wizard in Context Menu >>> *** 
+  34              	//  
+  35              	*/
+  36              	
+  37              	# *** Startup Code (executed after Reset) ***
+  38              	
+  39              	# Standard definitions of Mode bits and Interrupt (I & F) flags in PSRs 
+  40              	 
+  41              	        .equ    Mode_USR,   0x10 
+  42              	        .equ    Mode_FIQ,   0x11 
+  43              	        .equ    Mode_IRQ,   0x12 
+  44              	        .equ    Mode_SVC,   0x13 
+  45              	        .equ    Mode_ABT,   0x17 
+  46              	        .equ    Mode_UNDEF, 0x1B 
+  47              	        .equ    Mode_SYS,   0x1F 
+  48              	 
+  49              	        .equ    I_Bit, 0x80        /* when I bit is set, IRQ is disabled */ 
+  50              	        .equ    F_Bit, 0x40        /* when F bit is set, FIQ is disabled */ 
+  51              	 
+  52              	 
+  53              	# System Memory definitions 
+  54              	 
+  55              	/*
+  56              	// <h> Stack Configuration
+  57              	//   <o>  Top of Stack Address  <0x0-0xFFFFFFFF>
+  58              	//   <h>  Stack Sizes (in Bytes)
+  59              	//     <o1> Undefined Mode      <0x0-0xFFFFFFFF>
+  60              	//     <o2> Supervisor Mode     <0x0-0xFFFFFFFF>
+  61              	//     <o3> Abort Mode          <0x0-0xFFFFFFFF>
+  62              	//     <o4> Fast Interrupt Mode <0x0-0xFFFFFFFF>
+  63              	//     <o5> Interrupt Mode      <0x0-0xFFFFFFFF>
+  64              	//     <o6> User/System Mode    <0x0-0xFFFFFFFF>
+  65              	//   </h>
+  66              	// </h>
+  67              	*/
+  68              	        .equ    Top_Stack,      0x12000
+  69              	        .equ    UNDEF_Stack_Size,   4 
+  70              	        .equ    SVC_Stack_Size,     4 
+  71              	        .equ    ABT_Stack_Size,     4 
+  72              	        .equ    FIQ_Stack_Size,    128 
+  73              	        .equ    IRQ_Stack_Size,    128 
+  74              	        .equ    USR_Stack_Size,    1024 
+  75              	 
+  76              	
+  77              	/*
+  78              	// <e> PLL Setup
+  79              	//   <o1.0..2>  CD: PLL Multiplier Selection
+  80              	//               <0-7>
+  81              	//               <i> CD Value
+  82              	//   <o1.3>     FINT: Fast Interrupt
+  83              	//               <0-1>
+  84              	//               <i> Switches to CD0 for FIQ
+  85              	// </e>
+  86              	*/
+  87              		    .equ    PLL_SETUP,      1
+  88              	        .equ    PLLCFG_Val,     0x00000000
+  89              	
+  90              	/*
+  91              	// <q> Enable Stdlib I/O 
+  92              	// <i> enable this option when your code contains printf calls 
+  93              	*/
+  94              			.equ    En_StdIO, 0
+  95              	
+  96              			
+  97              	       
+  98              	
+  99              	# Starupt Code must be linked first at Address at which it expects to run.
+ 100              	
+ 101              	        .text
+ 102              	        .arm
+ 103              	
+ 104              	        .global _startup
+ 105              	        .func   _startup
+ 106              	_startup:
+ 107              	
+ 108              	
+ 109              	# Exception Vectors
+ 110              	#  Mapped to Address 0.
+ 111              	#  Absolute addressing mode must be used.
+ 112              	#  Dummy Handlers are implemented as infinite loops which can be modified.
+ 113              	
+ 114 0000 18F09FE5 	Vectors:        LDR     PC, Reset_Address
+ 115 0004 18F09FE5 	                LDR     PC, Undef_Addr
+ 116 0008 18F09FE5 	                LDR     PC, SWI_Addr
+ 117 000c 18F09FE5 	                LDR     PC, PAbt_Addr
+ 118 0010 18F09FE5 	                LDR     PC, DAbt_Addr
+ 119 0014 0000A0E1 	                NOP                            /* Reserved Vector */
+ 120 0018 14F09FE5 	                LDR     PC, IRQ_Addr
+ 121 001c 14F09FE5 	                LDR     PC, FIQ_Addr
+ 122              	
+ 123 0020 3C000000 	Reset_Address:  .word   Reset_Handler
+ 124 0024 00000000 	Undef_Addr:     .word   ADI_UNDEF_Interrupt_Setup 
+ 125 0028 00000000 	SWI_Addr:       .word   ADI_SWI_Interrupt_Setup 
+ 126 002c 00000000 	PAbt_Addr:      .word   ADI_PABORT_Interrupt_Setup 
+ 127 0030 00000000 	DAbt_Addr:      .word   ADI_DABORT_Interrupt_Setup 
+ 128              	@IRQ_Addr:       .word   ADI_IRQ_Interrupt_Setup 
+ 129 0034 F4000000 	IRQ_Addr:       .word   ADI_IRQ_Interrupt_Wrapper
+ 130 0038 00000000 	FIQ_Addr:       .word   ADI_FIQ_Interrupt_Setup 
+ 131              	
+ 132              	# Reset Handler
+ 133              	
+ 134              	Reset_Handler:  
+ 135              	
+ 136              	.if PLL_SETUP
+ 137 003c D0009FE5 	                LDR     R0, =MMR_BASE_0
+ 138 0040 0110A0E3 	                MOV     R1, #0x01         
+ 139 0044 041480E5 	                STR     R1, [R0,#POWKEY1_OFFSET]          
+ 140 0048 0010A0E3 	                MOV     R1, #PLLCFG_Val      
+ 141 004c 081480E5 	                STR     R1, [R0,#POWCON_OFFSET]    
+ 142 0050 F410A0E3 	                MOV     R1, #0xF4
+ 143 0054 0C1480E5 	                STR     R1, [R0,#POWKEY2_OFFSET]
+ 144              	.endif
+ 145              	
+ 146              	# Setup Stack for each mode 
+ 147 0058 120AA0E3 	                LDR     R0, =Top_Stack 
+ 148              	 
+ 149              	#  Enter Undefined Instruction Mode and set its Stack Pointer 
+ 150 005c DBF021E3 	                MSR     CPSR_c, #Mode_UNDEF|I_Bit|F_Bit 
+ 151 0060 00D0A0E1 	                MOV     SP, R0 
+ 152 0064 040040E2 	                SUB     R0, R0, #UNDEF_Stack_Size 
+ 153              	 
+ 154              	#  Enter Abort Mode and set its Stack Pointer 
+ 155 0068 D7F021E3 	                MSR     CPSR_c, #Mode_ABT|I_Bit|F_Bit 
+ 156 006c 00D0A0E1 	                MOV     SP, R0 
+ 157 0070 040040E2 	                SUB     R0, R0, #ABT_Stack_Size 
+ 158              	 
+ 159              	#  Enter FIQ Mode and set its Stack Pointer 
+ 160 0074 D1F021E3 	                MSR     CPSR_c, #Mode_FIQ|I_Bit|F_Bit 
+ 161 0078 00D0A0E1 	                MOV     SP, R0 
+ 162 007c 800040E2 	                SUB     R0, R0, #FIQ_Stack_Size 
+ 163              	 
+ 164              	#  Enter IRQ Mode and set its Stack Pointer 
+ 165 0080 D2F021E3 	                MSR     CPSR_c, #Mode_IRQ|I_Bit|F_Bit 
+ 166 0084 00D0A0E1 	                MOV     SP, R0 
+ 167 0088 800040E2 	                SUB     R0, R0, #IRQ_Stack_Size 
+ 168              	 
+ 169              	#  Enter Supervisor Mode and set its Stack Pointer 
+ 170 008c D3F021E3 	                MSR     CPSR_c, #Mode_SVC|I_Bit|F_Bit 
+ 171 0090 00D0A0E1 	                MOV     SP, R0 
+ 172 0094 040040E2 	                SUB     R0, R0, #SVC_Stack_Size 
+ 173              	 
+ 174              	#  Enter User Mode and set its Stack Pointer 
+ 175 0098 10F021E3 	                MSR     CPSR_c, #Mode_USR 
+ 176 009c 00D0A0E1 	                MOV     SP, R0 
+ 177              	 
+ 178              	#  Setup a default Stack Limit (when compiled with -mapcs-stack-check) 
+ 179 00a0 010BA0E3 	                mov     R0,#USR_Stack_Size
+ 180 00a4 00A04DE0 	                SUB     SL, SP,R0         /* USER STACK SIZE SL = R10 */ 
+ 181              	
+ 182              	/* mt: ifdef / else / endif */
+ 183              	#ifdef ROM_RUN
+ 184              	# Relocate .data section (Copy from ROM to RAM) 
+ 185 00a8 68109FE5 	                LDR     R1, =_etext 
+ 186 00ac 68209FE5 	                LDR     R2, =_data 
+ 187 00b0 68309FE5 	                LDR     R3, =_edata 
+ 188 00b4 030052E1 					CMP     R2, R3 /* mt */
+ 189 00b8 3100000A 					BEQ		DataIsEmpty /* mt */				
+ 190 00bc 030052E1 	LoopRel:        CMP     R2, R3 
+ 191 00c0 04009134 	                LDRLO   R0, [R1], #4 
+ 192 00c4 04008234 	                STRLO   R0, [R2], #4 
+ 193 00c8 2D00003A 	                BLO     LoopRel 
+ 194              	DataIsEmpty: /* mt */
+ 195              	#else
+ 196              	#warning RAM_RUN - .data will not be copied
+ 197              	#endif
+ 198              	 
+ 199              	# Clear .bss section (Zero init)                 
+ 200 00cc 0000A0E3 	                MOV     R0, #0 
+ 201 00d0 4C109FE5 	                LDR     R1, =__bss_start__ 
+ 202 00d4 4C209FE5 	                LDR     R2, =__bss_end__ 
+ 203 00d8 020051E1 	LoopZI:         CMP     R1, R2 
+ 204 00dc 04008134 	                STRLO   R0, [R1], #4 
+ 205 00e0 3400003A 	                BLO     LoopZI 
+ 206              	 
+ 207              	
+ 208              	.if En_StdIO
+ 209              	            
+ 210              	# Enter the standard system startup code required for stdlib I/O  
+ 211              	              B       _start	
+ 212              				      
+ 213              	.endif
+ 214              	 
+ 215              	# Enter the C code 
+ 216              	           	 
+ 217              	
+ 218              	
+ 219              	Jump_To_Main:   
+ 220 00e4 04E08FE2 	                ADR     LR, __Return_from_Main           
+ 221 00e8 3C009FE5 	                LDR     R0, =main
+ 222 00ec 10FF2FE1 	                BX      R0
+ 223              	
+ 224              	__Return_from_Main:
+ 225 00f0 3A0000EA 	                B       __Return_from_Main	 
+ 226              	
+ 227              	
+ 229              	        .endfunc 
+ 230              	
+ 231              			
+ 232              			.func ADI_IRQ_Interrupt_Wrapper
+ 233              	ADI_IRQ_Interrupt_Wrapper:
+ 234              	
+ 235              	@ adjust return-address
+ 236 00f4 04E04EE2 			sub lr, lr, #4
+ 237              	@ save registers
+ 238 00f8 0F502DE9 			stmdb sp!, {r0-r3, ip, lr}
+ 239              	@ r0 = *IRQ
+ 240              			.extern IRQ
+ 241 00fc 2C009FE5 			ldr r0, =IRQ
+ 242 0100 000090E5 			ldr r0, [r0]
+ 243              	@ if *IRQ != 0 call IRQ()
+ 244 0104 000050E3 			cmp r0, #0
+ 245 0108 0FE0A011 			movne lr, pc
+ 246 010c 10FF2F11 			bxne r0
+ 247              	@ restore registers and exit from wrapper (PC=saved LR)
+ 248 0110 0F90FDE8 			ldmia sp!, {r0-r3, ip, pc}^
+ 249              	
+ 251              			.endfunc
+ 252              	
+ 253 0114 0000FFFF 			.ltorg
+ 253      00000000 
+ 253      00000000 
+ 253      00000000 
+ 253      00000000 
+ 254              	        .end
+DEFINED SYMBOLS
+                            *ABS*:00000000 startup.S
+                            *ABS*:00000000 <command line>
+                            *ABS*:00000000 <built-in>
+                            *ABS*:00000000 startup.S
+           startup.S:27     *ABS*:ffff0000 MMR_BASE_0
+           startup.S:28     *ABS*:00000404 POWKEY1_OFFSET
+           startup.S:29     *ABS*:00000408 POWCON_OFFSET
+           startup.S:30     *ABS*:0000040c POWKEY2_OFFSET
+           startup.S:41     *ABS*:00000010 Mode_USR
+           startup.S:42     *ABS*:00000011 Mode_FIQ
+           startup.S:43     *ABS*:00000012 Mode_IRQ
+           startup.S:44     *ABS*:00000013 Mode_SVC
+           startup.S:45     *ABS*:00000017 Mode_ABT
+           startup.S:46     *ABS*:0000001b Mode_UNDEF
+           startup.S:47     *ABS*:0000001f Mode_SYS
+           startup.S:49     *ABS*:00000080 I_Bit
+           startup.S:50     *ABS*:00000040 F_Bit
+           startup.S:68     *ABS*:00012000 Top_Stack
+           startup.S:69     *ABS*:00000004 UNDEF_Stack_Size
+           startup.S:70     *ABS*:00000004 SVC_Stack_Size
+           startup.S:71     *ABS*:00000004 ABT_Stack_Size
+           startup.S:72     *ABS*:00000080 FIQ_Stack_Size
+           startup.S:73     *ABS*:00000080 IRQ_Stack_Size
+           startup.S:74     *ABS*:00000400 USR_Stack_Size
+           startup.S:87     *ABS*:00000001 PLL_SETUP
+           startup.S:88     *ABS*:00000000 PLLCFG_Val
+           startup.S:94     *ABS*:00000000 En_StdIO
+           startup.S:106    .text:00000000 _startup
+           startup.S:114    .text:00000000 Vectors
+           startup.S:123    .text:00000020 Reset_Address
+           startup.S:124    .text:00000024 Undef_Addr
+           startup.S:125    .text:00000028 SWI_Addr
+           startup.S:126    .text:0000002c PAbt_Addr
+           startup.S:127    .text:00000030 DAbt_Addr
+           startup.S:129    .text:00000034 IRQ_Addr
+           startup.S:130    .text:00000038 FIQ_Addr
+           startup.S:134    .text:0000003c Reset_Handler
+           startup.S:233    .text:000000f4 ADI_IRQ_Interrupt_Wrapper
+           startup.S:194    .text:000000cc DataIsEmpty
+           startup.S:190    .text:000000bc LoopRel
+           startup.S:203    .text:000000d8 LoopZI
+           startup.S:219    .text:000000e4 Jump_To_Main
+           startup.S:224    .text:000000f0 __Return_from_Main
+
+UNDEFINED SYMBOLS
+ADI_UNDEF_Interrupt_Setup
+ADI_SWI_Interrupt_Setup
+ADI_PABORT_Interrupt_Setup
+ADI_DABORT_Interrupt_Setup
+ADI_FIQ_Interrupt_Setup
+_etext
+_data
+_edata
+__bss_start__
+__bss_end__
+main
+IRQ

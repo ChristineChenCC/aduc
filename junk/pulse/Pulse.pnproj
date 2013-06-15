@@ -1,0 +1,1 @@
+<Project name="Pulse"><File path="GPIO.c"></File><File path="Makefile"></File><File path="irq.c"></File><File path="startup.S"></File><File path="ADuC7020-ROM.ld"></File><File path="ROM_RUN\pulse.sym"></File><File path="ROM_RUN\pulse.map"></File><File path="ROM_RUN\pulse.lss"></File></Project>

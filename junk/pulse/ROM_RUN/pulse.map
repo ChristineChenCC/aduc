@@ -1,0 +1,201 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+IntFLASH         0x00080000         0x0000f800         xr
+IntRAM           0x00010000         0x00002000         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ROM_RUN/startup.o
+LOAD ROM_RUN/irq.o
+LOAD ROM_RUN/GPIO.o
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/../../../../arm-elf/lib/thumb/libc.a
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/../../../../arm-elf/lib/thumb/libm.a
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/../../../../arm-elf/lib/thumb/libc.a
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/thumb/libgcc.a
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/thumb/libgcc.a
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/../../../../arm-elf/lib/thumb/libc.a
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/thumb/libgcc.a
+
+.text           0x00080000      0x2a4
+ *startup.o(.text .text.*)
+ .text          0x00080000      0x134 ROM_RUN/startup.o
+                0x00080000                _startup
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text.ADI_FIQ_Interrupt_Setup
+                0x00080134       0x34 ROM_RUN/irq.o
+                0x00080134                ADI_FIQ_Interrupt_Setup
+ .text.ADI_SWI_Interrupt_Setup
+                0x00080168       0x34 ROM_RUN/irq.o
+                0x00080168                ADI_SWI_Interrupt_Setup
+ .text.ADI_UNDEF_Interrupt_Setup
+                0x0008019c       0x34 ROM_RUN/irq.o
+                0x0008019c                ADI_UNDEF_Interrupt_Setup
+ .text.ADI_PABORT_Interrupt_Setup
+                0x000801d0       0x28 ROM_RUN/irq.o
+                0x000801d0                ADI_PABORT_Interrupt_Setup
+ .text.ADI_DABORT_Interrupt_Setup
+                0x000801f8       0x28 ROM_RUN/irq.o
+                0x000801f8                ADI_DABORT_Interrupt_Setup
+ .text.main     0x00080220       0x3c ROM_RUN/GPIO.o
+                0x00080220                main
+ .text.My_IRQ_Function
+                0x0008025c       0x48 ROM_RUN/GPIO.o
+                0x0008025c                My_IRQ_Function
+ *(.glue_7t)
+ *(.glue_7)
+                0x000802a4                . = ALIGN (0x4)
+
+.rodata
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+                0x000802a4                . = ALIGN (0x4)
+                0x000802a4                _etext = .
+                0x000802a4                PROVIDE (etext, .)
+
+.data           0x00010000        0x0 load address 0x000802a4
+                0x00010000                _data = .
+ *(.data .data.* .gnu.linkonce.d.*)
+                0x00010000                . = ALIGN (0x4)
+                0x00010000                _edata = (ADDR (.data) + SIZEOF (.data))
+                0x00010000                PROVIDE (edata, _edata)
+
+.bss            0x00010000        0x0
+                0x00010000                __bss_start = .
+                0x00010000                __bss_start__ = .
+ *(.bss)
+ *(COMMON)
+
+.bss.IRQ        0x00010000        0x4
+ .bss.IRQ       0x00010000        0x4 ROM_RUN/irq.o
+                0x00010000                IRQ
+
+.bss.SWI        0x00010004        0x4
+ .bss.SWI       0x00010004        0x4 ROM_RUN/irq.o
+                0x00010004                SWI
+
+.bss.FIQ        0x00010008        0x4
+ .bss.FIQ       0x00010008        0x4 ROM_RUN/irq.o
+                0x00010008                FIQ
+
+.bss.UNDEF      0x0001000c        0x4
+ .bss.UNDEF     0x0001000c        0x4 ROM_RUN/irq.o
+                0x0001000c                UNDEF
+
+.bss.PABORT     0x00010010        0x4
+ .bss.PABORT    0x00010010        0x4 ROM_RUN/irq.o
+                0x00010010                PABORT
+
+.bss.DABORT     0x00010014        0x4
+ .bss.DABORT    0x00010014        0x4 ROM_RUN/irq.o
+                0x00010014                DABORT
+                0x00010018                . = ALIGN (0x4)
+                0x00010018                __bss_end__ = .
+                0x00010018                __bss_end__ = .
+                0x00010018                _end = .
+                0x00010018                PROVIDE (end, .)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges
+ *(.debug_aranges)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info
+ *(.debug_info .gnu.linkonce.wi.*)
+
+.debug_abbrev
+ *(.debug_abbrev)
+
+.debug_line
+ *(.debug_line)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+OUTPUT(ROM_RUN/pulse.elf elf32-littlearm)
+
+Cross Reference Table
+
+Symbol                                            File
+ADI_DABORT_Interrupt_Setup                        ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+ADI_FIQ_Interrupt_Setup                           ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+ADI_PABORT_Interrupt_Setup                        ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+ADI_SWI_Interrupt_Setup                           ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+ADI_UNDEF_Interrupt_Setup                         ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+DABORT                                            ROM_RUN/irq.o
+FIQ                                               ROM_RUN/irq.o
+IRQ                                               ROM_RUN/irq.o
+                                                  ROM_RUN/GPIO.o
+                                                  ROM_RUN/startup.o
+My_IRQ_Function                                   ROM_RUN/GPIO.o
+PABORT                                            ROM_RUN/irq.o
+SWI                                               ROM_RUN/irq.o
+UNDEF                                             ROM_RUN/irq.o
+__bss_end__                                       ROM_RUN/startup.o
+__bss_start__                                     ROM_RUN/startup.o
+_data                                             ROM_RUN/startup.o
+_edata                                            ROM_RUN/startup.o
+_etext                                            ROM_RUN/startup.o
+_startup                                          ROM_RUN/startup.o
+main                                              ROM_RUN/GPIO.o
+                                                  ROM_RUN/startup.o

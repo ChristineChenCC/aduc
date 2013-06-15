@@ -1,0 +1,99 @@
+### uVision2 Project, (C) Keil Software
+### Do not modify !
+
+Target (Target 1), 0x0003 // Tools: 'ARM-GNU'
+
+Group (Source Group 1)
+
+File 1,1,<.\irq.c><irq.c>
+File 1,1,<.\GPIO.c><GPIO.c>
+File 1,2,<.\startup.S><startup.S>
+
+
+Options 1,0,0  // Target 'Target 1'
+ Device (ADuC7020)
+ Vendor (Analog Devices)
+ Cpu (IRAM(0x10000-0x11FFF) IROM(0x80000-0x8F7FF) CLOCK(32768) CPUTYPE(ARM7TDMI))
+ FlashUt ()
+ StupF ("Startup\ADI\ADuC702x.s" ("ADuC702x Startup Code"))
+ FlashDR (UL2ARM(-U88308796 -O7 -C0 -FO7 -FD10000 -FC800 -FN1 -FF0ADuC702X -FS080000 -FL0F800))
+ DevID (3677)
+ Rgf (ADuC7020.H)
+ Mem ()
+ C ()
+ A ()
+ RL ()
+ OH ()
+ DBC_IFX ()
+ DBC_CMS ()
+ DBC_AMS ()
+ DBC_LMS ()
+ UseEnv=0
+ EnvBin ()
+ EnvInc ()
+ EnvLib ()
+ EnvReg (ÿADI\)
+ OrgReg (ÿADI\)
+ TgStat=16
+ OutDir (.\ROM_RUN\)
+ OutName (pulse)
+ GenApp=1
+ GenLib=0
+ GenHex=0
+ Debug=1
+ Browse=1
+ LstDir (.\)
+ HexSel=1
+ MG32K=0
+ TGMORE=0
+ RunUsr 0 0 <>
+ RunUsr 1 0 <>
+ BrunUsr 0 0 <>
+ BrunUsr 1 0 <>
+ CrunUsr 0 0 <>
+ CrunUsr 1 0 <>
+ SVCSID <>
+ GLFLAGS=1790
+ GCPUTYP (ARM7TDMI)
+ TFlagsA { 0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ OCMARM { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ OCMARAM { 0,0,0,1,0,0,32,0,0 }
+ OCMAROM { 1,0,0,8,0,0,248,0,0 }
+ OCMXRAM { 0,0,0,0,0,0,0,0,0 }
+ OCMIRAM2 { 0,0,0,0,0,0,0,0,0 }
+ OCMIROM2 { 0,0,0,0,0,0,0,0,0 }
+ ACCFLG { 65,0,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ ACMISC ()
+ ACDEFN ()
+ ACUDEF ()
+ ACINCD ()
+ AASFLG { 4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ AAMISC ()
+ AADEFN ()
+ AAUDEF ()
+ AAINCD ()
+ PropFld { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ IncBld=1
+ AlwaysBuild=0
+ GenAsm=0
+ AsmAsm=0
+ PublicsOnly=0
+ StopCode=3
+ CustArgs ()
+ LibMods ()
+ ALDFLAG { 21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+ ALDTADR ()
+ ALDDADR ()
+ ALDBSSR ()
+ ALDICLB ()
+ ALDICDR ()
+ ALDMISC ()
+ ALDSCAT ()
+  OPTDL (SARM.DLL)(-cADuC70)(DARMAD.DLL)(-pADuC7020)(SARM.DLL)(-cADuC70)(TARMAD.DLL)(-pADuC7020)
+  OPTDBG 48117,0,()()()()()()()()()() (BIN\UL2ARM.DLL)()()()
+ FLASH1 { 9,0,0,0,0,0,0,0,255,255,255,255,0,0,0,0,0,0,0,0 }
+ FLASH2 (BIN\UL2ARM.DLL)
+ FLASH3 ()
+ FLASH4 ()
+EndOpt
+

@@ -1,0 +1,72 @@
+   1              		.file	"itoa.c"
+   2              		.global	__divsi3
+   3              		.section	.rodata.str1.4,"aMS",%progbits,1
+   4              		.align	2
+   5              	.LC0:
+   6 0000 7A797877 		.ascii	"zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdef"
+   6      76757473 
+   6      7271706F 
+   6      6E6D6C6B 
+   6      6A696867 
+   7 0033 6768696A 		.ascii	"ghijklmnopqrstuvwxyz\000"
+   7      6B6C6D6E 
+   7      6F707172 
+   7      73747576 
+   7      7778797A 
+   8              		.section	.text.itoa,"ax",%progbits
+   9              		.align	2
+  10              		.global	itoa
+  12              	itoa:
+  13              		@ args = 0, pretend = 0, frame = 0
+  14              		@ frame_needed = 1, uses_anonymous_args = 0
+  15 0000 023042E2 		sub	r3, r2, #2
+  16 0004 220053E3 		cmp	r3, #34
+  17 0008 0DC0A0E1 		mov	ip, sp
+  18 000c 0030A083 		movhi	r3, #0
+  19 0010 F0D92DE9 		stmfd	sp!, {r4, r5, r6, r7, r8, fp, ip, lr, pc}
+  20 0014 04B04CE2 		sub	fp, ip, #4
+  21 0018 0270A0E1 		mov	r7, r2
+  22 001c 0180A0E1 		mov	r8, r1
+  23 0020 0030C185 		strhib	r3, [r1, #0]
+  24 0024 2100008A 		bhi	.L1
+  25 0028 0140A0E1 		mov	r4, r1
+  26 002c 0160A0E1 		mov	r6, r1
+  27              	.L3:
+  28 0030 0710A0E1 		mov	r1, r7
+  29 0034 0050A0E1 		mov	r5, r0
+  30 0038 FEFFFFEB 		bl	__divsi3
+  31 003c 970003E0 		mul	r3, r7, r0
+  32 0040 4C209FE5 		ldr	r2, .L14
+  33 0044 053063E0 		rsb	r3, r3, r5
+  34 0048 023083E0 		add	r3, r3, r2
+  35 004c 2330D3E5 		ldrb	r3, [r3, #35]	@ zero_extendqisi2
+  36 0050 000050E3 		cmp	r0, #0
+  37 0054 0130C4E4 		strb	r3, [r4], #1
+  38 0058 0A00001A 		bne	.L3
+  39 005c 000055E3 		cmp	r5, #0
+  40 0060 2D30A0B3 		movlt	r3, #45
+  41 0064 0130C4B4 		strltb	r3, [r4], #1
+  42 0068 010044E4 		strb	r0, [r4], #-1
+  43 006c 040058E1 		cmp	r8, r4
+  44 0070 2100002A 		bcs	.L1
+  45              	.L11:
+  46 0074 0020D4E5 		ldrb	r2, [r4, #0]	@ zero_extendqisi2
+  47 0078 0030D6E5 		ldrb	r3, [r6, #0]	@ zero_extendqisi2
+  48 007c 013044E4 		strb	r3, [r4], #-1
+  49 0080 0120C6E4 		strb	r2, [r6], #1
+  50 0084 040056E1 		cmp	r6, r4
+  51 0088 1B00003A 		bcc	.L11
+  52              	.L1:
+  53 008c 0800A0E1 		mov	r0, r8
+  54 0090 F0A91BE9 		ldmea	fp, {r4, r5, r6, r7, r8, fp, sp, pc}
+  55              	.L15:
+  56              		.align	2
+  57              	.L14:
+  58 0094 00000000 		.word	.LC0
+  60              		.ident	"GCC: (GNU) 3.3.2"
+DEFINED SYMBOLS
+                            *ABS*:00000000 itoa.c
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//ccAkpxAl.s:12     .text.itoa:00000000 itoa
+
+UNDEFINED SYMBOLS
+__divsi3

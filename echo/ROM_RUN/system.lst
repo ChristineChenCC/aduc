@@ -1,0 +1,31 @@
+   1              		.file	"system.c"
+   2              		.section	.text.InitFreq,"ax",%progbits
+   3              		.align	2
+   4              		.global	InitFreq
+   6              	InitFreq:
+   7              		@ args = 0, pretend = 0, frame = 0
+   8              		@ frame_needed = 0, uses_anonymous_args = 0
+   9              		@ link register save eliminated.
+  10 0000 20309FE5 		ldr	r3, .L2
+  11 0004 0120A0E3 		mov	r2, #1
+  12 0008 002083E5 		str	r2, [r3, #0]
+  13 000c 18309FE5 		ldr	r3, .L2+4
+  14 0010 0220A0E3 		mov	r2, #2
+  15 0014 002083E5 		str	r2, [r3, #0]
+  16 0018 10309FE5 		ldr	r3, .L2+8
+  17 001c F420A0E3 		mov	r2, #244
+  18              		@ lr needed for prologue
+  19 0020 002083E5 		str	r2, [r3, #0]
+  20 0024 0EF0A0E1 		mov	pc, lr
+  21              	.L3:
+  22              		.align	2
+  23              	.L2:
+  24 0028 0404FFFF 		.word	-64508
+  25 002c 0804FFFF 		.word	-64504
+  26 0030 0C04FFFF 		.word	-64500
+  28              		.ident	"GCC: (GNU) 3.3.2"
+DEFINED SYMBOLS
+                            *ABS*:00000000 system.c
+/var/folders/ni/niVqX1hjFySYWsqwKp9bq++++TI/-Tmp-//cconc3Sn.s:6      .text.InitFreq:00000000 InitFreq
+
+NO UNDEFINED SYMBOLS

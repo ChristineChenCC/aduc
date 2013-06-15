@@ -1,0 +1,272 @@
+Archive member included because of file (symbol)
+
+/usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_divsi3.o)
+                              ROM_RUN/uart.o (__divsi3)
+/usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_dvmd_tls.o)
+                              /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_divsi3.o) (__div0)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+IntFLASH         0x00080000         0x0000f800         xr
+IntRAM           0x00010000         0x00002000         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ROM_RUN/startup.o
+LOAD ROM_RUN/irq.o
+LOAD ROM_RUN/main.o
+LOAD ROM_RUN/uart.o
+LOAD ROM_RUN/system.o
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/../../../../arm-elf/lib/libc.a
+LOAD /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a
+
+.text           0x00080000      0x8d0
+ *startup.o(.text .text.*)
+ .text          0x00080000      0x134 ROM_RUN/startup.o
+                0x00080000                _startup
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text.ADI_FIQ_Interrupt_Setup
+                0x00080134       0x34 ROM_RUN/irq.o
+                0x00080134                ADI_FIQ_Interrupt_Setup
+ .text.ADI_SWI_Interrupt_Setup
+                0x00080168       0x34 ROM_RUN/irq.o
+                0x00080168                ADI_SWI_Interrupt_Setup
+ .text.ADI_UNDEF_Interrupt_Setup
+                0x0008019c       0x34 ROM_RUN/irq.o
+                0x0008019c                ADI_UNDEF_Interrupt_Setup
+ .text.ADI_PABORT_Interrupt_Setup
+                0x000801d0       0x2c ROM_RUN/irq.o
+                0x000801d0                ADI_PABORT_Interrupt_Setup
+ .text.ADI_DABORT_Interrupt_Setup
+                0x000801fc       0x2c ROM_RUN/irq.o
+                0x000801fc                ADI_DABORT_Interrupt_Setup
+ .text.Delay    0x00080228       0x10 ROM_RUN/main.o
+                0x00080228                Delay
+ .text.InitADC  0x00080238       0x4c ROM_RUN/main.o
+                0x00080238                InitADC
+ .text.ADC_convert
+                0x00080284       0x54 ROM_RUN/main.o
+                0x00080284                ADC_convert
+ .text.hex      0x000802d8       0x40 ROM_RUN/main.o
+                0x000802d8                hex
+ .text.nl       0x00080318       0x20 ROM_RUN/main.o
+                0x00080318                nl
+ .text.Tmp      0x00080338       0x38 ROM_RUN/main.o
+                0x00080338                Tmp
+ .text.main     0x00080370      0x2ec ROM_RUN/main.o
+                0x00080370                main
+ .text.InitUart
+                0x0008065c       0x4c ROM_RUN/uart.o
+                0x0008065c                InitUart
+ .text.getc     0x000806a8       0x28 ROM_RUN/uart.o
+                0x000806a8                getc
+ .text.putc     0x000806d0       0x28 ROM_RUN/uart.o
+                0x000806d0                putc
+ .text.puts     0x000806f8       0x34 ROM_RUN/uart.o
+                0x000806f8                puts
+ .text.itoa     0x0008072c       0x98 ROM_RUN/uart.o
+                0x0008072c                itoa
+ .text.puti     0x000807c4       0x24 ROM_RUN/uart.o
+                0x000807c4                puti
+ .text.InitFreq
+                0x000807e8       0x34 ROM_RUN/system.o
+                0x000807e8                InitFreq
+ .text          0x0008081c       0xb0 /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_divsi3.o)
+                0x0008081c                __divsi3
+ .text          0x000808cc        0x4 /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_dvmd_tls.o)
+                0x000808cc                __div0
+ *(.glue_7t)
+ *(.glue_7)
+                0x000808d0                . = ALIGN (0x4)
+
+.rodata         0x000808d0       0x5c
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata.str1.4
+                0x000808d0       0x11 ROM_RUN/main.o
+                                 0x14 (size before relaxing)
+ *fill*         0x000808e1        0x3 00
+ .rodata.str1.4
+                0x000808e4       0x48 ROM_RUN/uart.o
+                0x0008092c                . = ALIGN (0x4)
+                0x0008092c                _etext = .
+                0x0008092c                PROVIDE (etext, .)
+
+.data           0x00010000        0x0 load address 0x0008092c
+                0x00010000                _data = .
+ *(.data .data.* .gnu.linkonce.d.*)
+                0x00010000                . = ALIGN (0x4)
+                0x00010000                _edata = (ADDR (.data) + SIZEOF (.data))
+                0x00010000                PROVIDE (edata, _edata)
+
+.bss            0x00010000        0x0
+                0x00010000                __bss_start = .
+                0x00010000                __bss_start__ = .
+ *(.bss)
+ *(COMMON)
+
+.bss.IRQ        0x00010000        0x4
+ .bss.IRQ       0x00010000        0x4 ROM_RUN/irq.o
+                0x00010000                IRQ
+
+.bss.SWI        0x00010004        0x4
+ .bss.SWI       0x00010004        0x4 ROM_RUN/irq.o
+                0x00010004                SWI
+
+.bss.FIQ        0x00010008        0x4
+ .bss.FIQ       0x00010008        0x4 ROM_RUN/irq.o
+                0x00010008                FIQ
+
+.bss.UNDEF      0x0001000c        0x4
+ .bss.UNDEF     0x0001000c        0x4 ROM_RUN/irq.o
+                0x0001000c                UNDEF
+
+.bss.PABORT     0x00010010        0x4
+ .bss.PABORT    0x00010010        0x4 ROM_RUN/irq.o
+                0x00010010                PABORT
+
+.bss.DABORT     0x00010014        0x4
+ .bss.DABORT    0x00010014        0x4 ROM_RUN/irq.o
+                0x00010014                DABORT
+                0x00010018                . = ALIGN (0x4)
+                0x00010018                __bss_end__ = .
+                0x00010018                __bss_end__ = .
+                0x00010018                _end = .
+                0x00010018                PROVIDE (end, .)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000       0x40
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_divsi3.o)
+ .debug_aranges
+                0x00000020       0x20 /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_dvmd_tls.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x00000000      0x100
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000       0x80 /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_divsi3.o)
+ .debug_info    0x00000080       0x80 /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_dvmd_tls.o)
+
+.debug_abbrev   0x00000000       0x28
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0x14 /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_divsi3.o)
+ .debug_abbrev  0x00000014       0x14 /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_dvmd_tls.o)
+
+.debug_line     0x00000000       0xc5
+ *(.debug_line)
+ .debug_line    0x00000000       0x6b /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_divsi3.o)
+ .debug_line    0x0000006b       0x5a /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_dvmd_tls.o)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+OUTPUT(ROM_RUN/echo.elf elf32-littlearm)
+
+Cross Reference Table
+
+Symbol                                            File
+ADC_convert                                       ROM_RUN/main.o
+ADI_DABORT_Interrupt_Setup                        ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+ADI_FIQ_Interrupt_Setup                           ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+ADI_PABORT_Interrupt_Setup                        ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+ADI_SWI_Interrupt_Setup                           ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+ADI_UNDEF_Interrupt_Setup                         ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+DABORT                                            ROM_RUN/irq.o
+Delay                                             ROM_RUN/main.o
+FIQ                                               ROM_RUN/irq.o
+IRQ                                               ROM_RUN/irq.o
+                                                  ROM_RUN/startup.o
+InitADC                                           ROM_RUN/main.o
+InitFreq                                          ROM_RUN/system.o
+                                                  ROM_RUN/main.o
+InitUart                                          ROM_RUN/uart.o
+                                                  ROM_RUN/main.o
+PABORT                                            ROM_RUN/irq.o
+SWI                                               ROM_RUN/irq.o
+Tmp                                               ROM_RUN/main.o
+UNDEF                                             ROM_RUN/irq.o
+__bss_end__                                       ROM_RUN/startup.o
+__bss_start__                                     ROM_RUN/startup.o
+__div0                                            /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_dvmd_tls.o)
+                                                  /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_divsi3.o)
+__divsi3                                          /usr/local/bin/../lib/gcc-lib/arm-elf/3.3.2/libgcc.a(_divsi3.o)
+                                                  ROM_RUN/uart.o
+_data                                             ROM_RUN/startup.o
+_edata                                            ROM_RUN/startup.o
+_etext                                            ROM_RUN/startup.o
+_startup                                          ROM_RUN/startup.o
+c2f                                               ROM_RUN/main.o
+getc                                              ROM_RUN/uart.o
+                                                  ROM_RUN/main.o
+hex                                               ROM_RUN/main.o
+itoa                                              ROM_RUN/uart.o
+main                                              ROM_RUN/main.o
+                                                  ROM_RUN/startup.o
+nl                                                ROM_RUN/main.o
+putc                                              ROM_RUN/uart.o
+                                                  ROM_RUN/main.o
+puti                                              ROM_RUN/uart.o
+                                                  ROM_RUN/main.o
+puts                                              ROM_RUN/uart.o

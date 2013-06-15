@@ -1,0 +1,20 @@
+
+Temperature Inputs
+
+ Outdoor	DAC0 ADC0
+ Water 		DAC0 ADC1
+
+ Floor 	1	DAC1 ADC2
+ Air	1	DAC1 ADC3
+
+ Floor 	2	DAC2 ADC2
+ Air	2	DAC2 ADC3
+
+Relay Outputs
+
+ Reset Switch
+
+ Zone 1 circulator
+ Zone 2 circulator
+ Zone 3 circulator
+
