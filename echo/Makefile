@@ -65,7 +65,7 @@
 # - 10. Nov. 2007  - renamed TCHAIN to TCHAIN_PREFIX, other minor cleanup (mth)
 
 # Toolchain prefix (i.e arm-elf- -> arm-elf-gcc.exe)
-TCHAIN_PREFIX = arm-elf-
+#TCHAIN_PREFIX = arm-elf-
 #TCHAIN_PREFIX = arm-none-eabi-
 
 FLASH_TOOL = OPENOCD

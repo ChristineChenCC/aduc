@@ -1,5 +1,4 @@
    1              	# 1 "startup.S"
-   2              	# 1 "<built-in>"
    1              	/* 
    0              	
    0              	
@@ -190,11 +189,11 @@
  186 00ac 68209FE5 	                LDR     R2, =_data 
  187 00b0 68309FE5 	                LDR     R3, =_edata 
  188 00b4 030052E1 					CMP     R2, R3 /* mt */
- 189 00b8 3100000A 					BEQ		DataIsEmpty /* mt */				
+ 189 00b8 0300000A 					BEQ		DataIsEmpty /* mt */				
  190 00bc 030052E1 	LoopRel:        CMP     R2, R3 
  191 00c0 04009134 	                LDRLO   R0, [R1], #4 
  192 00c4 04008234 	                STRLO   R0, [R2], #4 
- 193 00c8 2D00003A 	                BLO     LoopRel 
+ 193 00c8 FBFFFF3A 	                BLO     LoopRel 
  194              	DataIsEmpty: /* mt */
  195              	#else
  196              	#warning RAM_RUN - .data will not be copied
@@ -206,7 +205,7 @@
  202 00d4 4C209FE5 	                LDR     R2, =__bss_end__ 
  203 00d8 020051E1 	LoopZI:         CMP     R1, R2 
  204 00dc 04008134 	                STRLO   R0, [R1], #4 
- 205 00e0 3400003A 	                BLO     LoopZI 
+ 205 00e0 FCFFFF3A 	                BLO     LoopZI 
  206              	 
  207              	
  208              	.if En_StdIO
@@ -226,7 +225,7 @@
  222 00ec 10FF2FE1 	                BX      R0
  223              	
  224              	__Return_from_Main:
- 225 00f0 3A0000EA 	                B       __Return_from_Main	 
+ 225 00f0 FEFFFFEA 	                B       __Return_from_Main	 
  226              	
  227              	
  229              	        .endfunc 
@@ -259,49 +258,49 @@
  253      00000000 
  254              	        .end
 DEFINED SYMBOLS
-                            *ABS*:00000000 startup.S
-                            *ABS*:00000000 <command line>
-                            *ABS*:00000000 <built-in>
-                            *ABS*:00000000 startup.S
-           startup.S:27     *ABS*:ffff0000 MMR_BASE_0
-           startup.S:28     *ABS*:00000404 POWKEY1_OFFSET
-           startup.S:29     *ABS*:00000408 POWCON_OFFSET
-           startup.S:30     *ABS*:0000040c POWKEY2_OFFSET
-           startup.S:41     *ABS*:00000010 Mode_USR
-           startup.S:42     *ABS*:00000011 Mode_FIQ
-           startup.S:43     *ABS*:00000012 Mode_IRQ
-           startup.S:44     *ABS*:00000013 Mode_SVC
-           startup.S:45     *ABS*:00000017 Mode_ABT
-           startup.S:46     *ABS*:0000001b Mode_UNDEF
-           startup.S:47     *ABS*:0000001f Mode_SYS
-           startup.S:49     *ABS*:00000080 I_Bit
-           startup.S:50     *ABS*:00000040 F_Bit
-           startup.S:68     *ABS*:00012000 Top_Stack
-           startup.S:69     *ABS*:00000004 UNDEF_Stack_Size
-           startup.S:70     *ABS*:00000004 SVC_Stack_Size
-           startup.S:71     *ABS*:00000004 ABT_Stack_Size
-           startup.S:72     *ABS*:00000080 FIQ_Stack_Size
-           startup.S:73     *ABS*:00000080 IRQ_Stack_Size
-           startup.S:74     *ABS*:00000400 USR_Stack_Size
-           startup.S:87     *ABS*:00000001 PLL_SETUP
-           startup.S:88     *ABS*:00000000 PLLCFG_Val
-           startup.S:94     *ABS*:00000000 En_StdIO
-           startup.S:106    .text:00000000 _startup
-           startup.S:114    .text:00000000 Vectors
-           startup.S:123    .text:00000020 Reset_Address
-           startup.S:124    .text:00000024 Undef_Addr
-           startup.S:125    .text:00000028 SWI_Addr
-           startup.S:126    .text:0000002c PAbt_Addr
-           startup.S:127    .text:00000030 DAbt_Addr
-           startup.S:129    .text:00000034 IRQ_Addr
-           startup.S:130    .text:00000038 FIQ_Addr
-           startup.S:134    .text:0000003c Reset_Handler
-           startup.S:233    .text:000000f4 ADI_IRQ_Interrupt_Wrapper
-           startup.S:194    .text:000000cc DataIsEmpty
-           startup.S:190    .text:000000bc LoopRel
-           startup.S:203    .text:000000d8 LoopZI
-           startup.S:219    .text:000000e4 Jump_To_Main
-           startup.S:224    .text:000000f0 __Return_from_Main
+           startup.S:27     *ABS*:00000000ffff0000 MMR_BASE_0
+           startup.S:28     *ABS*:0000000000000404 POWKEY1_OFFSET
+           startup.S:29     *ABS*:0000000000000408 POWCON_OFFSET
+           startup.S:30     *ABS*:000000000000040c POWKEY2_OFFSET
+           startup.S:41     *ABS*:0000000000000010 Mode_USR
+           startup.S:42     *ABS*:0000000000000011 Mode_FIQ
+           startup.S:43     *ABS*:0000000000000012 Mode_IRQ
+           startup.S:44     *ABS*:0000000000000013 Mode_SVC
+           startup.S:45     *ABS*:0000000000000017 Mode_ABT
+           startup.S:46     *ABS*:000000000000001b Mode_UNDEF
+           startup.S:47     *ABS*:000000000000001f Mode_SYS
+           startup.S:49     *ABS*:0000000000000080 I_Bit
+           startup.S:50     *ABS*:0000000000000040 F_Bit
+           startup.S:68     *ABS*:0000000000012000 Top_Stack
+           startup.S:69     *ABS*:0000000000000004 UNDEF_Stack_Size
+           startup.S:70     *ABS*:0000000000000004 SVC_Stack_Size
+           startup.S:71     *ABS*:0000000000000004 ABT_Stack_Size
+           startup.S:72     *ABS*:0000000000000080 FIQ_Stack_Size
+           startup.S:73     *ABS*:0000000000000080 IRQ_Stack_Size
+           startup.S:74     *ABS*:0000000000000400 USR_Stack_Size
+           startup.S:87     *ABS*:0000000000000001 PLL_SETUP
+           startup.S:88     *ABS*:0000000000000000 PLLCFG_Val
+           startup.S:94     *ABS*:0000000000000000 En_StdIO
+           startup.S:106    .text:0000000000000000 _startup
+           startup.S:114    .text:0000000000000000 Vectors
+           startup.S:123    .text:0000000000000020 Reset_Address
+           startup.S:114    .text:0000000000000000 $a
+           startup.S:124    .text:0000000000000024 Undef_Addr
+           startup.S:125    .text:0000000000000028 SWI_Addr
+           startup.S:126    .text:000000000000002c PAbt_Addr
+           startup.S:127    .text:0000000000000030 DAbt_Addr
+           startup.S:129    .text:0000000000000034 IRQ_Addr
+           startup.S:130    .text:0000000000000038 FIQ_Addr
+           startup.S:123    .text:0000000000000020 $d
+           startup.S:134    .text:000000000000003c Reset_Handler
+           startup.S:233    .text:00000000000000f4 ADI_IRQ_Interrupt_Wrapper
+           startup.S:137    .text:000000000000003c $a
+           startup.S:194    .text:00000000000000cc DataIsEmpty
+           startup.S:190    .text:00000000000000bc LoopRel
+           startup.S:203    .text:00000000000000d8 LoopZI
+           startup.S:219    .text:00000000000000e4 Jump_To_Main
+           startup.S:224    .text:00000000000000f0 __Return_from_Main
+           startup.S:253    .text:0000000000000114 $d
 
 UNDEFINED SYMBOLS
 ADI_UNDEF_Interrupt_Setup
